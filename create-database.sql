@@ -1,0 +1,6 @@
+CREATE DATABASE pp;
+
+CREATE USER pp_admin WITH PASSWORD 'password';
+
+GRANT ALL PRIVILEGES ON DATABASE pp TO pp_admin;
+
