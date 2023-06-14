@@ -73,16 +73,70 @@ function GetProfile() {
       });
   };
 
+  const handleTakenChange = (medicationId, taken) => {
+    // Update the taken property for the selected medication
+    const updatedProfileData = profileData.map((medication) => {
+      if (medication.id === medicationId) {
+        return { ...medication, taken: !taken };
+      }
+      return medication;
+    });
+
+    // Send updated data to the server (you can adjust this part based on your API)
+    fetch(`http://localhost:8000/api/profile/${medicationId}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ taken: !taken }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProfileData(updatedProfileData);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div>
       <Header isLoggedIn={isLoggedIn} />
       <div className="profile-container">
         {profileData ? (
-          <div>
+          <div className="profile-data">
             <h2 className="profile-title">
               {profileData[0]?.username}'s Profile
             </h2>
-            <pre>{JSON.stringify(profileData, null, 2)}</pre>
+            <table className="profile-table">
+              <thead>
+                <tr>
+                  <th>Medication</th>
+                  <th>Dosage</th>
+                  <th>Description</th>
+                  <th>Taken</th>
+                </tr>
+              </thead>
+              <tbody>
+                {profileData.map((medication) => (
+                  <tr key={medication.id}>
+                    <td>{medication.medication}</td>
+                    <td>{medication.dosage}</td>
+                    <td>{medication.description}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={medication.taken}
+                        onChange={() =>
+                          handleTakenChange(medication.id, medication.taken)
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <p>Loading profile data...</p>

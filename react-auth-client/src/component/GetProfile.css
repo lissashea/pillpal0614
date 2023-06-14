@@ -23,10 +23,10 @@
 }
 
 .profile-data {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
 }
 
 .profile-data pre {
@@ -35,54 +35,37 @@
   border-radius: 5px;
   font-family: "Inter", sans-serif;
   overflow-x: auto;
+  white-space: pre-wrap; /* Added to preserve line breaks */
+  max-height: 300px; /* Added to limit the height and enable scrolling if needed */
+  overflow-y: auto; /* Added to enable vertical scrolling if needed */
 }
 
-.profile-data pre code {
-  display: block;
-  white-space: pre-wrap;
-}
-
-.add-medication {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.add-medication h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #336e70;
-}
-
-.add-medication form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.add-medication label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.add-medication input,
-.add-medication textarea {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+.profile-table {
   width: 100%;
+  border-collapse: collapse;
 }
 
-.add-medication button {
-  padding: 0.5rem 1rem;
-  background-color: #51989b;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.profile-table th,
+.profile-table td {
+  padding: 0.5rem;
+  border: 1px solid #336e70;
 }
 
-.add-medication button:hover {
+.profile-table th {
   background-color: #336e70;
+  color: #fff;
+  font-weight: bold;
+}
+
+.profile-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.profile-table td {
+  text-align: center;
+  color: #336e70;
 }
