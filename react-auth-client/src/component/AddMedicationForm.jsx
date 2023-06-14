@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "./GetProfile.css";
 
 function AddMedicationForm({ onAddMedication }) {
   const [medication, setMedication] = useState('');

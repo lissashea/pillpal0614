@@ -16,6 +16,7 @@ User = get_user_model()
 
 # Create your views here.
 
+
 class RegisterView(APIView):
 
     def post(self, request):
@@ -29,6 +30,7 @@ class RegisterView(APIView):
             return Response({'message': 'Registration successful'})
 
         return Response(serializer.errors, status=422)
+
 
 class LoginView(APIView):
 
@@ -47,17 +49,32 @@ class LoginView(APIView):
         if not user.check_password(password):
             raise PermissionDenied({'message': 'Invalid credentials'})
 
-        token = jwt.encode({'sub': user.id}, settings.SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(
+            {'sub': user.id}, settings.SECRET_KEY, algorithm='HS256')
         return Response({'token': token, 'user_id': user.id, 'message': f'Welcome back {user.username}!'})
 
-    
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         medications = Medication.objects.filter(user=request.user)
         serializer = MedicationSerializer(medications, many=True)
-        return Response(serializer.data)
+        profile_data = serializer.data
+        profile_data_with_username = []
+
+        for data in profile_data:
+            user_id = data['user']
+            user = User.objects.get(id=user_id)
+            username = user.username
+            data['username'] = username
+            profile_data_with_username.append(data)
+
+        return Response(profile_data_with_username)
 
     def post(self, request):
         serializer = MedicationSerializer(data=request.data)

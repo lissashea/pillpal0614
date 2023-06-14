@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header.jsx";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,7 @@ function SignIn() {
 
   return (
     <div>
+      <Header isLoggedIn={false} />
       <h2>Sign In</h2>
       <form onSubmit={handleSignIn}>
         <div>

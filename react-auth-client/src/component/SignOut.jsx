@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from "./Header.jsx";
 
 function SignOut() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ function SignOut() {
 
   return (
     <div>
+      <Header isLoggedIn={true} />
       <h2>Sign Out</h2>
       <button onClick={handleSignOut}>Sign Out</button>
     </div>

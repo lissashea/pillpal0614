@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from "./Header.jsx";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -51,6 +52,8 @@ function SignUp() {
   };
 
   return (
+    <div>
+      <Header isLoggedIn={false} />
     <form onSubmit={handleSubmit}>
       <input
         type="text"
@@ -82,6 +85,7 @@ function SignUp() {
       />
       <button type="submit">Sign Up</button>
     </form>
+    </div>
   );
 }
 

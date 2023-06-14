@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddMedicationForm from "./AddMedicationForm.jsx";
+import Header from "./Header.jsx";
+import "./GetProfile.css";
 
 function GetProfile() {
   const [profileData, setProfileData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -12,7 +16,6 @@ function GetProfile() {
       console.error("Error: No token");
       return;
     }
-
     console.log("Fetching profile data...");
     fetch("http://localhost:8000/api/profile/", {
       headers: {
@@ -23,6 +26,19 @@ function GetProfile() {
       .then((data) => {
         console.log("Profile data received:", data);
         setProfileData(data);
+        setIsLoggedIn(true);
+
+        // Update the condition to check for the appropriate data structure
+        if (
+          Array.isArray(data) &&
+          data.length > 0 &&
+          data[0].user &&
+          data[0].user.username
+        ) {
+          setUsername(data[0].user.username);
+        } else {
+          console.log("Invalid data structure:", data);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -31,12 +47,8 @@ function GetProfile() {
 
   const handleAddMedication = (medicationData) => {
     let userId = null;
-    if (profileData && profileData.length > 0) {
-      if (profileData[0].user) {
-        userId = profileData[0].user.id;
-      } else if (profileData[0].user_id) {
-        userId = profileData[0].user_id;
-      }
+    if (profileData && profileData.user && profileData.user.id) {
+      userId = profileData.user.id;
     }
 
     const data = {
@@ -54,31 +66,30 @@ function GetProfile() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setProfileData((prevData) => [...prevData, data]);
+        setProfileData((prevData) => ({ ...prevData, data }));
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem("token");
-    navigate("/sign-out");
-  };
-
   return (
     <div>
-      {profileData ? (
-        <div>
-          <h2>Profile Data:</h2>
-          <pre>{JSON.stringify(profileData, null, 2)}</pre>
-          <button onClick={handleSignOut}>Sign Out</button>
-        </div>
-      ) : (
-        <p>Loading profile data...</p>
-      )}
+      <Header isLoggedIn={isLoggedIn} />
+      <div className="profile-container">
+        {profileData ? (
+          <div>
+            <h2 className="profile-title">
+              {profileData[0]?.username}'s Profile
+            </h2>
+            <pre>{JSON.stringify(profileData, null, 2)}</pre>
+          </div>
+        ) : (
+          <p>Loading profile data...</p>
+        )}
 
-      <AddMedicationForm onAddMedication={handleAddMedication} />
+        <AddMedicationForm onAddMedication={handleAddMedication} />
+      </div>
     </div>
   );
 }
