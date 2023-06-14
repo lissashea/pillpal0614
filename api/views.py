@@ -58,3 +58,10 @@ class ProfileView(APIView):
         medications = Medication.objects.filter(user=request.user)
         serializer = MedicationSerializer(medications, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = MedicationSerializer(data=request.data)
+        if serializer.is_valid():
+            medication = serializer.save(user=request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=422)
