@@ -21,11 +21,14 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+
+            # Create a new Medication object and associate it with the user
+            medication = Medication.objects.create(user=user)
+
             return Response({'message': 'Registration successful'})
 
         return Response(serializer.errors, status=422)
-
 
 class LoginView(APIView):
 
@@ -48,14 +51,10 @@ class LoginView(APIView):
         return Response({'token': token, 'user_id': user.id, 'message': f'Welcome back {user.username}!'})
 
     
-class MedicationView(APIView):
+class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, id):
-        # Check if the requested user ID matches the authenticated user's ID
-        if request.user.id != id:
-            raise PermissionDenied({'message': 'Invalid user ID'})
-
+    def get(self, request):
         medications = Medication.objects.filter(user=request.user)
         serializer = MedicationSerializer(medications, many=True)
         return Response(serializer.data)

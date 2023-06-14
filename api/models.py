@@ -8,7 +8,8 @@ class Medication(models.Model):
     medication = models.CharField(max_length=100)
     dosage = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
-    taken = models.BooleanField()
+    taken = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.medication
