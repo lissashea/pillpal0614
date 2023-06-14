@@ -1,9 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import SignUp from './components/SignUp';
-import SignIn from './components/SignIn';
-import GetProfile from './components/GetProfile';
+import SignUp from './component/SignUp.jsx';
+import SignIn from './component/SignIn.jsx';
+import GetProfile from './component/GetProfile.jsx';
 
 function App() {
   return (

@@ -5,6 +5,7 @@ function SignUp() {
     username: '',
     email: '',
     password: '',
+    password_confirmation: '',
   });
 
   const handleChange = (event) => {
@@ -17,13 +18,35 @@ function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Perform form submission logic here
-    console.log(formData);
+
+    const serializedData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      password_confirmation: formData.password_confirmation,
+    };
+
+    fetch('http://localhost:8000/api/register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(serializedData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Handle the response, e.g., display a success message or redirect to the login page
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
     // Reset form data
     setFormData({
       username: '',
       email: '',
       password: '',
+      password_confirmation: '',
     });
   };
 
@@ -48,6 +71,13 @@ function SignUp() {
         name="password"
         placeholder="Password"
         value={formData.password}
+        onChange={handleChange}
+      />
+      <input
+        type="password"
+        name="password_confirmation"
+        placeholder="Confirm Password"
+        value={formData.password_confirmation}
         onChange={handleChange}
       />
       <button type="submit">Sign Up</button>

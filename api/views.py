@@ -10,7 +10,7 @@ from django.conf import settings
 import jwt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-
+from rest_framework.permissions import IsAuthenticated
 
 User = get_user_model()
 
@@ -45,30 +45,17 @@ class LoginView(APIView):
             raise PermissionDenied({'message': 'Invalid credentials'})
 
         token = jwt.encode({'sub': user.id}, settings.SECRET_KEY, algorithm='HS256')
-        return Response({'token': token, 'message': f'Welcome back {user.username}!'})
-    
+        return Response({'token': token, 'user_id': user.id, 'message': f'Welcome back {user.username}!'})
 
+    
 class MedicationView(APIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        # Extract the token from the request's Authorization header
-        auth_header = request.META.get('HTTP_AUTHORIZATION')
-        if auth_header and auth_header.startswith('Bearer '):
-            token = auth_header.split(' ')[1]
-            try:
-                # Decode the token and extract the user ID
-                decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-                user_id = decoded_token.get('sub')
-                user = User.objects.get(id=user_id)
+    def get(self, request, id):
+        # Check if the requested user ID matches the authenticated user's ID
+        if request.user.id != id:
+            raise PermissionDenied({'message': 'Invalid user ID'})
 
-                # Filter medications by the logged-in user
-                medications = Medication.objects.filter(user=user)
-                serializer = MedicationSerializer(medications, many=True)
-                return Response(serializer.data)
-
-            except (jwt.DecodeError, User.DoesNotExist):
-                raise PermissionDenied({'message': 'Invalid token or user not found'})
-
-        raise PermissionDenied({'message': 'Invalid authorization header'})
+        medications = Medication.objects.filter(user=request.user)
+        serializer = MedicationSerializer(medications, many=True)
+        return Response(serializer.data)
