@@ -1,15 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-function SignOut() {
+function SignOut({ onSignOut }) {
   const navigate = useNavigate();
 
-
   const handleSignOut = () => {
-    // Remove the token and user id from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user_id');
-
-    // Navigate to the sign-in page
+    onSignOut();
     navigate('/');
   };
 

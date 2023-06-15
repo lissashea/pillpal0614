@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function SignIn() {
+function SignIn({ onSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function SignIn() {
         console.log("Sign-in successful. Response data:", data);
         const { token } = data;
         localStorage.setItem("token", token);
+        onSignIn(); // Call the callback to update isLoggedIn in App.js
         navigate("/profile");
       })
       .catch((error) => {
