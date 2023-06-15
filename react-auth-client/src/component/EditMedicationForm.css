@@ -1,0 +1,42 @@
+.edit-medication-form-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.edit-medication-form-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #336e70;
+}
+
+.edit-medication-form-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.edit-medication-form-input {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.edit-medication-form-textarea {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  height: 100px;
+}
+
+.edit-medication-form-button {
+  padding: 0.5rem 1rem;
+  background-color: #51989b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-medication-form-button:hover {
+  background-color: #336e70;
+}

@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddMedicationForm from "./AddMedicationForm.jsx";
+import EditMedicationForm from "./EditMedicationForm.jsx";
+import {
+  fetchProfileData,
+  addMedication,
+  updateMedication,
+} from "../services/apiConfig.js";
 import "./GetProfile.css";
 
 function GetProfile() {
@@ -8,17 +14,14 @@ function GetProfile() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
+  const [selectedMedication, setSelectedMedication] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Fetching profile data...");
 
-    fetch("http://localhost:8000/api/profile/?cache=" + Date.now(), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
+    fetchProfileData(token)
       .then((data) => {
         console.log("Profile data received:", data);
         setProfileData(data);
@@ -30,11 +33,10 @@ function GetProfile() {
   }, [navigate, setProfileData, setIsLoggedIn, token]);
 
   useEffect(() => {
-    if (token && username) {
+    if (token) {
       localStorage.setItem("token", token);
-      localStorage.setItem("username", username);
     }
-  }, [token, username]);
+  }, [token]);
 
   const handleAddMedication = (medicationData) => {
     let userId = null;
@@ -46,15 +48,7 @@ function GetProfile() {
       ...medicationData,
       user: userId,
     };
-    fetch("http://localhost:8000/api/profile/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
+    addMedication(token, data)
       .then((responseData) => {
         setProfileData((prevData) => [...prevData, responseData]);
         console.log("Medication added successfully!");
@@ -76,15 +70,27 @@ function GetProfile() {
     setProfileData(updatedProfileData);
 
     // Send updated data to the server (you can adjust this part based on your API)
-    fetch(`http://localhost:8000/api/profile/`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ taken: !taken }),
-    })
-      .then((response) => response.json())
+    updateMedication(token, medicationId, { taken: !taken })
+      .then((data) => {
+        setProfileData(updatedProfileData);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const handleEditMedication = (medicationId, updatedMedication) => {
+    const updatedProfileData = profileData.map((medication) => {
+      if (medication.id === medicationId) {
+        return { ...medication, ...updatedMedication };
+      }
+      return medication;
+    });
+
+    setProfileData(updatedProfileData);
+
+    // Send updated data to the server (you can adjust this part based on your API)
+    updateMedication(token, medicationId, updatedMedication)
       .then((data) => {
         setProfileData(updatedProfileData);
       })
@@ -125,6 +131,14 @@ function GetProfile() {
                             handleTakenChange(medication.id, medication.taken)
                           }
                         />
+                        <button
+                          onClick={() => {
+                            setSelectedMedication(medication);
+                            setEditMode(true);
+                          }}
+                        >
+                          Edit
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -138,9 +152,15 @@ function GetProfile() {
           <p>Loading profile data...</p>
         )}
         <AddMedicationForm onAddMedication={handleAddMedication} />
+        {editMode && (
+          <EditMedicationForm
+            medicationId={selectedMedication.id}
+            medication={selectedMedication}
+            onEditMedication={handleEditMedication}
+          />
+        )}
       </div>
     </div>
   );
-}
-
+}  
 export default GetProfile;
