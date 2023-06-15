@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header.jsx";
 
 function SignUp() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    username: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
   });
 
   const handleChange = (event) => {
@@ -20,6 +21,8 @@ function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const navigate = useNavigate;
+
     const serializedData = {
       username: formData.username,
       email: formData.email,
@@ -27,64 +30,64 @@ function SignUp() {
       password_confirmation: formData.password_confirmation,
     };
 
-    fetch('http://localhost:8000/api/register/', {
-      method: 'POST',
+    fetch("http://localhost:8000/api/register/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(serializedData),
     })
       .then((res) => res.json())
       .then((data) => {
-        // Handle the response, e.g., display a success message or redirect to the login page
+        navigate("/profile"); // Navigate to the sign-in page ("/")
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
 
     // Reset form data
     setFormData({
-      username: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
+      username: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
     });
   };
 
   return (
     <div>
       <Header isLoggedIn={false} />
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        name="password_confirmation"
-        placeholder="Confirm Password"
-        value={formData.password_confirmation}
-        onChange={handleChange}
-      />
-      <button type="submit">Sign Up</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleChange}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password_confirmation"
+          placeholder="Confirm Password"
+          value={formData.password_confirmation}
+          onChange={handleChange}
+        />
+        <button type="submit">Sign Up</button>
+      </form>
     </div>
   );
 }

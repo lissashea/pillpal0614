@@ -14,19 +14,22 @@ function GetProfile() {
   useEffect(() => {
     if (!token) {
       console.error("Error: No token");
+      navigate("/signin"); // Redirect to the sign-in page
       return;
     }
+
     console.log("Fetching profile data...");
+
     fetch("http://localhost:8000/api/profile/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Profile data received:", data);
-        setProfileData(data);
-        setIsLoggedIn(true);
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Profile data received:", data);
+      setProfileData(data);
+      setIsLoggedIn(true);
 
         // Update the condition to check for the appropriate data structure
         if (
@@ -43,7 +46,14 @@ function GetProfile() {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [token]);
+  }, [token, navigate]);
+
+  useEffect(() => {
+    if (token && username) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+    }
+  }, [token, username]);
 
   const handleAddMedication = (medicationData) => {
     let userId = null;
@@ -55,7 +65,6 @@ function GetProfile() {
       ...medicationData,
       user: userId,
     };
-
     fetch("http://localhost:8000/api/profile/", {
       method: "POST",
       headers: {
@@ -64,12 +73,12 @@ function GetProfile() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        setProfileData((prevData) => ({ ...prevData, data }));
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+      .then((response) => response.json())
+      .then((responseData) => {
+        setProfileData((prevData) => ({
+          ...prevData,
+          medication: responseData,
+        }));
       });
   };
 
@@ -82,8 +91,10 @@ function GetProfile() {
       return medication;
     });
 
+    setProfileData(updatedProfileData);
+
     // Send updated data to the server (you can adjust this part based on your API)
-    fetch(`http://localhost:8000/api/profile/${medicationId}/`, {
+    fetch(`http://localhost:8000/api/profile/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -109,39 +120,42 @@ function GetProfile() {
             <h2 className="profile-title">
               {profileData[0]?.username}'s Profile
             </h2>
-            <table className="profile-table">
-              <thead>
-                <tr>
-                  <th>Medication</th>
-                  <th>Dosage</th>
-                  <th>Description</th>
-                  <th>Taken</th>
-                </tr>
-              </thead>
-              <tbody>
-                {profileData.map((medication) => (
-                  <tr key={medication.id}>
-                    <td>{medication.medication}</td>
-                    <td>{medication.dosage}</td>
-                    <td>{medication.description}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={medication.taken}
-                        onChange={() =>
-                          handleTakenChange(medication.id, medication.taken)
-                        }
-                      />
-                    </td>
+            {Array.isArray(profileData) && profileData.length > 0 ? (
+              <table className="profile-table">
+                <thead>
+                  <tr>
+                    <th>Medication</th>
+                    <th>Dosage</th>
+                    <th>Description</th>
+                    <th>Taken</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {profileData.map((medication) => (
+                    <tr key={medication.id}>
+                      <td>{medication.medication}</td>
+                      <td>{medication.dosage}</td>
+                      <td>{medication.description}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={medication.taken}
+                          onChange={() =>
+                            handleTakenChange(medication.id, medication.taken)
+                          }
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No medication data available.</p>
+            )}
           </div>
         ) : (
           <p>Loading profile data...</p>
         )}
-
         <AddMedicationForm onAddMedication={handleAddMedication} />
       </div>
     </div>

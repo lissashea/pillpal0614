@@ -11,7 +11,7 @@ function SignOut() {
     localStorage.removeItem('user_id');
 
     // Navigate to the sign-in page
-    navigate('/');
+    navigate('/signin');
   };
 
   return (

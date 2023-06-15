@@ -14,6 +14,8 @@ function SignIn() {
       password: password,
     };
 
+    console.log("Sending sign-in request...");
+
     fetch("http://localhost:8000/api/login/", {
       method: "POST",
       headers: {
@@ -23,6 +25,7 @@ function SignIn() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("Sign-in successful. Response data:", data);
         const { token } = data;
         localStorage.setItem("token", token);
         navigate("/profile");
