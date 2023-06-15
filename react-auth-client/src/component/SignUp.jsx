@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "./Header.jsx";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -18,10 +17,8 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const navigate = useNavigate;
+  const SignUp = () => {
+    const navigate = useNavigate();
 
     const serializedData = {
       username: formData.username,
@@ -39,7 +36,7 @@ function SignUp() {
     })
       .then((res) => res.json())
       .then((data) => {
-        navigate("/profile"); // Navigate to the sign-in page ("/")
+        navigate("/signin"); // Navigate to the sign-in page ("/signin")
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -56,8 +53,7 @@ function SignUp() {
 
   return (
     <div>
-      <Header isLoggedIn={false} />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={SignUp}>
         <input
           type="text"
           name="username"

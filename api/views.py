@@ -11,6 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 import jwt
 
+
 User = get_user_model()
 
 class RegisterView(APIView):
@@ -54,16 +55,10 @@ class LoginView(APIView):
 
 
 class ProfileView(APIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
         medications = Medication.objects.filter(user=request.user)
-
-        if not medications:
-            raise NotFound({'message': 'No medications found for the user'})
-
         serializer = MedicationSerializer(medications, many=True)
         profile_data = serializer.data
         profile_data_with_username = []
@@ -80,6 +75,6 @@ class ProfileView(APIView):
     def post(self, request):
         serializer = MedicationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            medication = serializer.save(user=request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=422)

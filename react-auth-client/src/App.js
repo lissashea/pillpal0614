@@ -8,17 +8,17 @@ import SignOut from "./component/SignOut.jsx";
 
 function App() {
   const isLoggedIn = localStorage.getItem("token") ? true : false;
-
   return (
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/profile" element={<GetProfile />} />
-          <Route path="/sign-out" element={<SignOut />} />
-        </Routes>
-      </div>
+    <div className="App">
+      <Header isLoggedIn={isLoggedIn} />
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        {/* <Route path="/signin" element={<SignIn />} /> */}
+        <Route path="/profile" element={<GetProfile />} />
+        <Route path="/sign-out" element={<SignOut />} />
+      </Routes>
+    </div>
   );
 }
 

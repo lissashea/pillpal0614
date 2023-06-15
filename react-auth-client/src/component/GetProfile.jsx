@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddMedicationForm from "./AddMedicationForm.jsx";
-import Header from "./Header.jsx";
 import "./GetProfile.css";
 
 function GetProfile() {
@@ -12,41 +11,23 @@ function GetProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
-      console.error("Error: No token");
-      navigate("/signin"); // Redirect to the sign-in page
-      return;
-    }
-
     console.log("Fetching profile data...");
 
-    fetch("http://localhost:8000/api/profile/", {
+    fetch("http://localhost:8000/api/profile/?cache=" + Date.now(), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Profile data received:", data);
-      setProfileData(data);
-      setIsLoggedIn(true);
-
-        // Update the condition to check for the appropriate data structure
-        if (
-          Array.isArray(data) &&
-          data.length > 0 &&
-          data[0].user &&
-          data[0].user.username
-        ) {
-          setUsername(data[0].user.username);
-        } else {
-          console.log("Invalid data structure:", data);
-        }
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Profile data received:", data);
+        setProfileData(data);
+        setIsLoggedIn(true);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [token, navigate]);
+  }, [navigate, setProfileData, setIsLoggedIn, token]);
 
   useEffect(() => {
     if (token && username) {
@@ -75,10 +56,11 @@ function GetProfile() {
     })
       .then((response) => response.json())
       .then((responseData) => {
-        setProfileData((prevData) => ({
-          ...prevData,
-          medication: responseData,
-        }));
+        setProfileData((prevData) => [...prevData, responseData]);
+        console.log("Medication added successfully!");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   };
 
@@ -102,7 +84,7 @@ function GetProfile() {
       },
       body: JSON.stringify({ taken: !taken }),
     })
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => {
         setProfileData(updatedProfileData);
       })
@@ -113,7 +95,6 @@ function GetProfile() {
 
   return (
     <div>
-      <Header isLoggedIn={isLoggedIn} />
       <div className="profile-container">
         {profileData ? (
           <div className="profile-data">
