@@ -11,6 +11,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 import jwt
 from rest_framework.generics import UpdateAPIView
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 
 User = get_user_model()
@@ -80,9 +82,9 @@ class ProfileView(APIView):
         serializer = MedicationSerializer(data=request.data)
         if serializer.is_valid():
             medication = serializer.save(user=request.user)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=422)
-    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
     def patch(self, request, medication_id):
         medication = Medication.objects.get(id=medication_id, user=request.user)
         serializer = MedicationSerializer(medication, data=request.data, partial=True)
@@ -90,3 +92,9 @@ class ProfileView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class DeleteMedicationView(APIView):
+    def delete(self, request, medication_id):
+        medication = get_object_or_404(Medication, id=medication_id, user=request.user)
+        medication.delete()
+        return JsonResponse({'message': 'Medication deleted successfully'})
