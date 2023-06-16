@@ -12,10 +12,10 @@ import "./GetProfile.css";
 function GetProfile() {
   const [profileData, setProfileData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,27 +59,24 @@ function GetProfile() {
   };
 
   const handleTakenChange = (medicationId, taken) => {
-    // Update the taken property for the selected medication
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {
         return { ...medication, taken: !taken };
       }
       return medication;
     });
-  
+
     setProfileData(updatedProfileData);
-  
-    // Send the PATCH request to update the "taken" status
+
     updateMedication(token, medicationId, { taken: !taken })
       .then((data) => {
-        // Update the profile data with the updated medication
         setProfileData(updatedProfileData);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
-    
+
   const handleEditMedication = (medicationId, updatedMedication) => {
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {
@@ -90,10 +87,14 @@ function GetProfile() {
 
     setProfileData(updatedProfileData);
 
-    // Send updated data to the server (you can adjust this part based on your API)
     updateMedication(token, medicationId, updatedMedication)
       .then((data) => {
         setProfileData(updatedProfileData);
+        setUpdateSuccess(true);
+        setTimeout(() => {
+          setEditMode(false);
+          setUpdateSuccess(false);
+        }, 2000);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -160,11 +161,17 @@ function GetProfile() {
         )}
         <AddMedicationForm onAddMedication={handleAddMedication} />
         {editMode && (
-          <EditMedicationForm
-            medicationId={selectedMedication.id}
-            medication={selectedMedication}
-            onEditMedication={handleEditMedication}
-          />
+          <>
+            <EditMedicationForm
+              medication={selectedMedication}
+              onUpdateMedication={handleEditMedication}
+            />
+            {updateSuccess && (
+              <p className="update-success-message">
+                Medication updated successfully!
+              </p>
+            )}
+          </>
         )}
       </div>
     </div>
