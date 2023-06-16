@@ -9,17 +9,17 @@ function Nav({ isLoggedIn }) {
         {isLoggedIn ? (
           <>
             <li>
-              <NavLink exact={true} to="/" className="nav-link" activeClassName="activeclassname">
+              <NavLink exact="true" to="/" className="nav-link" activeclassname="active">
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink to="/profile" className="nav-link" activeClassName="activeclassname">
+              <NavLink to="/profile" className="nav-link" activeclassname="active">
                 Profile
               </NavLink>
             </li>
             <li>
-              <NavLink to="/sign-out" className="nav-link" activeClassName="activeclassname">
+              <NavLink to="/sign-out" className="nav-link" activeclassname="active">
                 Sign Out
               </NavLink>
             </li>
@@ -27,17 +27,17 @@ function Nav({ isLoggedIn }) {
         ) : (
           <>
             <li>
-              <NavLink to="/sign-in" className="nav-link" activeClassName="activeclassname">
+              <NavLink to="/sign-in" className="nav-link" activeclassname="active">
                 Sign In
               </NavLink>
             </li>
             <li>
-              <NavLink to="/sign-up" className="nav-link" activeClassName="activeclassname">
+              <NavLink to="/sign-up" className="nav-link" activeclassname="active">
                 Sign Up
               </NavLink>
             </li>
             <li>
-              <NavLink to="/about-us" className="nav-link" activeClassName="activeclassname">
+              <NavLink to="/about-us" className="nav-link" activeclassname="active">
                 About Us
               </NavLink>
             </li>

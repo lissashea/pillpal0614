@@ -12,7 +12,7 @@ import "./GetProfile.css";
 function GetProfile() {
   const [profileData, setProfileData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -59,6 +59,7 @@ function GetProfile() {
   };
 
   const handleTakenChange = (medicationId, taken) => {
+    // Update the taken property for the selected medication
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {
         return { ...medication, taken: !taken };
@@ -68,15 +69,17 @@ function GetProfile() {
   
     setProfileData(updatedProfileData);
   
+    // Send the PATCH request to update the "taken" status
     updateMedication(token, medicationId, { taken: !taken })
       .then((data) => {
-        // Update successful
+        // Update the profile data with the updated medication
+        setProfileData(updatedProfileData);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
-  
+    
   const handleEditMedication = (medicationId, updatedMedication) => {
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {

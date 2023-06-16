@@ -25,7 +25,7 @@ export async function addMedication(token, medicationData) {
 
 export function updateMedication(token, medicationId, updatedData) {
   return fetch(`${BASE_URL}/medications/${medicationId}/`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -37,3 +37,4 @@ export function updateMedication(token, medicationId, updatedData) {
     throw new Error(error.message);
   });
 }
+

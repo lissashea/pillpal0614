@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 import jwt
+from rest_framework.generics import UpdateAPIView
 
 
 User = get_user_model()
@@ -33,7 +34,10 @@ class RegisterView(APIView):
             })
 
         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
+    
+class UpdateMedicationStatusView(UpdateAPIView):
+    serializer_class = MedicationSerializer
+    queryset = Medication.objects.all()
 
 class LoginView(APIView):
     def get_user(self, email):
