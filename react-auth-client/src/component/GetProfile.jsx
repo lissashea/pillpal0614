@@ -59,26 +59,24 @@ function GetProfile() {
   };
 
   const handleTakenChange = (medicationId, taken) => {
-    // Update the taken property for the selected medication
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {
         return { ...medication, taken: !taken };
       }
       return medication;
     });
-
+  
     setProfileData(updatedProfileData);
-
-    // Send updated data to the server (you can adjust this part based on your API)
+  
     updateMedication(token, medicationId, { taken: !taken })
       .then((data) => {
-        setProfileData(updatedProfileData);
+        // Update successful
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
-
+  
   const handleEditMedication = (medicationId, updatedMedication) => {
     const updatedProfileData = profileData.map((medication) => {
       if (medication.id === medicationId) {
@@ -115,11 +113,15 @@ function GetProfile() {
                     <th>Dosage</th>
                     <th>Description</th>
                     <th>Taken</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {profileData.map((medication) => (
-                    <tr key={medication.id}>
+                    <tr
+                      key={medication.id}
+                      className={medication.taken ? "medication-taken" : ""}
+                    >
                       <td>{medication.medication}</td>
                       <td>{medication.dosage}</td>
                       <td>{medication.description}</td>
@@ -131,6 +133,8 @@ function GetProfile() {
                             handleTakenChange(medication.id, medication.taken)
                           }
                         />
+                      </td>
+                      <td>
                         <button
                           onClick={() => {
                             setSelectedMedication(medication);
@@ -162,5 +166,6 @@ function GetProfile() {
       </div>
     </div>
   );
-}  
+}
+
 export default GetProfile;

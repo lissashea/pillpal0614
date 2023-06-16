@@ -23,15 +23,17 @@ export async function addMedication(token, medicationData) {
   return responseData;
 }
 
-export async function updateMedication(token, medicationId, updatedMedicationData) {
-  const response = await fetch(`${BASE_URL}/profile/${medicationId}/`, {
-    method: "PATCH",
+export function updateMedication(token, medicationId, updatedData) {
+  return fetch(`${BASE_URL}/medications/${medicationId}/`, {
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(updatedMedicationData),
+    body: JSON.stringify(updatedData),
+  })
+  .then((response) => response.json())
+  .catch((error) => {
+    throw new Error(error.message);
   });
-  const responseData = await response.json();
-  return responseData;
 }

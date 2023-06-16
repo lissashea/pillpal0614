@@ -78,3 +78,11 @@ class ProfileView(APIView):
             medication = serializer.save(user=request.user)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=422)
+    
+    def patch(self, request, medication_id):
+        medication = Medication.objects.get(id=medication_id, user=request.user)
+        serializer = MedicationSerializer(medication, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
