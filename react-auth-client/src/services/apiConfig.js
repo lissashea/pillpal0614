@@ -10,6 +10,25 @@ export async function fetchProfileData(token) {
   return data;
 }
 
+export async function signUp(signUpData) {
+  const response = await fetch(`${BASE_URL}/register/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(signUpData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to sign up");
+  }
+
+  const data = await response.json();
+  const { token, user_id } = data;
+  return { token, user_id };
+}
+
+
 export async function signIn(signInData) {
   const response = await fetch(`${BASE_URL}/login/`, {
     method: "POST",
@@ -39,24 +58,6 @@ export async function addMedication(token, medicationData) {
   });
   const responseData = await response.json();
   return responseData;
-}
-
-export async function signUp(signUpData) {
-  const response = await fetch(`${BASE_URL}/register/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(signUpData),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to sign up");
-  }
-
-  const data = await response.json();
-  const { token, user_id } = data;
-  return { token, user_id };
 }
 
 export const updateMedication = (token, medicationId, updatedData) => {

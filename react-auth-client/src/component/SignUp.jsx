@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signUp } from "../services/apiConfig.js";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -17,8 +18,10 @@ function SignUp() {
     }));
   };
 
-  const SignUp = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     const serializedData = {
       username: formData.username,
@@ -27,14 +30,7 @@ function SignUp() {
       password_confirmation: formData.password_confirmation,
     };
 
-    fetch("http://localhost:8000/api/register/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(serializedData),
-    })
-      .then((res) => res.json())
+    signUp(serializedData)
       .then((data) => {
         navigate("/signin"); // Navigate to the sign-in page ("/signin")
       })
@@ -53,7 +49,7 @@ function SignUp() {
 
   return (
     <div>
-      <form onSubmit={SignUp}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="username"
