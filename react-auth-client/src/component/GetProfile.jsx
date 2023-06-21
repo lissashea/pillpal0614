@@ -141,8 +141,8 @@ function GetProfile() {
                     <th>Dosage</th>
                     <th>Description</th>
                     <th>Taken</th>
-                    <th>Actions</th>
-                    <th>Delete</th>
+                    <th>Edit Medication</th>
+                    <th>Delete Medication</th>
                   </tr>
                 </thead>
                 <tbody>
