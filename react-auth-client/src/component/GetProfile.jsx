@@ -18,7 +18,8 @@ function GetProfile() {
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [addMedicationFormVisible, setAddMedicationFormVisible] = useState(false);
+  const [addMedicationFormVisible, setAddMedicationFormVisible] =
+    useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -170,11 +171,10 @@ function GetProfile() {
                         </button>
                       </td>
                       <td>
-                        <button
-                          onClick={() => handleDeleteMedication(medication.id)}
-                        >
-                          Delete Medication
-                        </button>
+                        <DeleteMedication
+                          medicationId={medication.id}
+                          onDeleteMedication={handleDeleteMedication}
+                        />
                       </td>
                     </tr>
                   ))}
