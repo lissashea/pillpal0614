@@ -57,24 +57,24 @@ export const updateMedication = (token, medicationId, updatedData) => {
 };
 
 
-// export async  function deleteMedication(token, medicationId) {
-//   return fetch(`${BASE_URL}/medications/${medicationId}/`, {
-//     method: 'DELETE',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       Authorization: `Bearer ${token}`,
-//     },
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         return response.json();
-//       } else if (response.status === 404) {
-//         throw new Error('Medication not found');
-//       } else {
-//         throw new Error('Failed to delete medication');
-//       }
-//     })
-//     .catch((error) => {
-//       throw new Error(error.message);
-//     });
-// }
+export async  function deleteMedication(token, medicationId) {
+  return fetch(`${BASE_URL}/medications/${medicationId}/`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status === 404) {
+        throw new Error('Medication not found');
+      } else {
+        throw new Error('Failed to delete medication');
+      }
+    })
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+}

@@ -6,8 +6,10 @@ import {
   fetchProfileData,
   addMedication,
   updateMedication,
+  deleteMedication,
 } from "../services/apiConfig.js";
 import "./GetProfile.css";
+import DeleteMedication from "./DeleteMedication.jsx";
 
 function GetProfile() {
   const [profileData, setProfileData] = useState(null);
@@ -84,9 +86,9 @@ function GetProfile() {
       }
       return medication;
     });
-  
+
     setProfileData(updatedProfileData);
-  
+
     updateMedication(token, medicationId, updatedMedication)
       .then((data) => {
         setProfileData(updatedProfileData);
@@ -106,6 +108,20 @@ function GetProfile() {
     setEditMode(true);
   };
 
+  const handleDeleteMedication = (medicationId) => {
+    deleteMedication(token, medicationId)
+      .then(() => {
+        const updatedProfileData = profileData.filter(
+          (medication) => medication.id !== medicationId
+        );
+        setProfileData(updatedProfileData);
+        console.log("Medication deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div>
       <div className="profile-container">
@@ -123,6 +139,7 @@ function GetProfile() {
                     <th>Description</th>
                     <th>Taken</th>
                     <th>Actions</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -148,6 +165,13 @@ function GetProfile() {
                           onClick={() => handleEditButtonClick(medication)}
                         >
                           Edit
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => handleDeleteMedication(medication.id)}
+                        >
+                          Delete Medication
                         </button>
                       </td>
                     </tr>
