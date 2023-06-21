@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddMedicationForm from "./AddMedicationForm.jsx";
 import EditMedicationForm from "./EditMedicationForm.jsx";
+import DeleteMedication from "./DeleteMedication.jsx";
 import {
   fetchProfileData,
   addMedication,
@@ -9,7 +10,6 @@ import {
   deleteMedication,
 } from "../services/apiConfig.js";
 import "./GetProfile.css";
-import DeleteMedication from "./DeleteMedication.jsx";
 
 function GetProfile() {
   const [profileData, setProfileData] = useState(null);
@@ -18,6 +18,7 @@ function GetProfile() {
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [addMedicationFormVisible, setAddMedicationFormVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +55,7 @@ function GetProfile() {
       .then((responseData) => {
         setProfileData((prevData) => [...prevData, responseData]);
         console.log("Medication added successfully!");
+        setAddMedicationFormVisible(false); // Hide the add medication form after submission
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -185,7 +187,12 @@ function GetProfile() {
         ) : (
           <p>Loading profile data...</p>
         )}
-        <AddMedicationForm onAddMedication={handleAddMedication} />
+        <button onClick={() => setAddMedicationFormVisible(true)}>
+          Add Medication
+        </button>
+        {addMedicationFormVisible && (
+          <AddMedicationForm onAddMedication={handleAddMedication} />
+        )}
         {editMode && selectedMedication && (
           <>
             <EditMedicationForm
