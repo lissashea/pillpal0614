@@ -7,7 +7,6 @@ import SignIn from "./component/SignIn.jsx";
 import GetProfile from "./component/GetProfile.jsx";
 import SignOut from "./component/SignOut.jsx";
 import Home from "./component/Home.jsx";
-// import EditMedicationForm from "./component/EditMedicationForm.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -27,12 +26,6 @@ function App() {
           path="/sign-out"
           element={<SignOut onSignOut={() => setIsLoggedIn(false)} />}
         />
-        {/* <Route
-          path="/edit-medication/:medicationId"
-          element={
-            <EditMedicationForm onEditMedication={handleEditMedication} />
-          }
-        /> */}
       </Routes>
     </div>
   );
