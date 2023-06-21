@@ -133,6 +133,9 @@ function GetProfile() {
             <h2 className="profile-title">
               {profileData[0]?.username}'s Profile
             </h2>
+            <button className="addMedication" onClick={() => setAddMedicationFormVisible(true)}>
+              Add Medication
+            </button>
             {Array.isArray(profileData) && profileData.length > 0 ? (
               <table className="profile-table">
                 <thead>
@@ -187,9 +190,6 @@ function GetProfile() {
         ) : (
           <p>Loading profile data...</p>
         )}
-        <button onClick={() => setAddMedicationFormVisible(true)}>
-          Add Medication
-        </button>
         {addMedicationFormVisible && (
           <AddMedicationForm onAddMedication={handleAddMedication} />
         )}
