@@ -41,6 +41,24 @@ export async function addMedication(token, medicationData) {
   return responseData;
 }
 
+export async function signUp(signUpData) {
+  const response = await fetch(`${BASE_URL}/register/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(signUpData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to sign up");
+  }
+
+  const data = await response.json();
+  const { token, user_id } = data;
+  return { token, user_id };
+}
+
 export const updateMedication = (token, medicationId, updatedData) => {
   return fetch(`${BASE_URL}/medications/update/${medicationId}/`, {
     method: "PATCH",
@@ -56,12 +74,11 @@ export const updateMedication = (token, medicationId, updatedData) => {
     });
 };
 
-
-export async  function deleteMedication(token, medicationId) {
+export async function deleteMedication(token, medicationId) {
   return fetch(`${BASE_URL}/medications/${medicationId}/`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   })
@@ -69,9 +86,9 @@ export async  function deleteMedication(token, medicationId) {
       if (response.ok) {
         return response.json();
       } else if (response.status === 404) {
-        throw new Error('Medication not found');
+        throw new Error("Medication not found");
       } else {
-        throw new Error('Failed to delete medication');
+        throw new Error("Failed to delete medication");
       }
     })
     .catch((error) => {
