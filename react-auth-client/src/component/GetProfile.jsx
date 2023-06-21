@@ -6,7 +6,6 @@ import {
   fetchProfileData,
   addMedication,
   updateMedication,
-  // deleteMedication, // Import the deleteMedication API function
 } from "../services/apiConfig.js";
 import "./GetProfile.css";
 
@@ -17,8 +16,6 @@ function GetProfile() {
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  // const [deleteMode, setDeleteMode] = useState(false); // Add deleteMode state
-  // // New state variable
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -103,20 +100,11 @@ function GetProfile() {
         console.error("Error:", error);
       });
   };
-    // const handleDeleteMedication = (medicationId) => {
-  //   deleteMedication(token, medicationId)
-  //     .then(() => {
-  //       const updatedProfileData = profileData.filter(
-  //         (medication) => medication.id !== medicationId
-  //       );
-  //       setProfileData(updatedProfileData);
-  //       setDeleteMode(false);
-  //       console.log("Medication deleted successfully!");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
+
+  const handleEditButtonClick = (medication) => {
+    setSelectedMedication(medication);
+    setEditMode(true);
+  };
 
   return (
     <div>
@@ -157,10 +145,7 @@ function GetProfile() {
                       </td>
                       <td>
                         <button
-                          onClick={() => {
-                            setSelectedMedication(medication);
-                            setEditMode(true);
-                          }}
+                          onClick={() => handleEditButtonClick(medication)}
                         >
                           Edit
                         </button>
@@ -177,10 +162,11 @@ function GetProfile() {
           <p>Loading profile data...</p>
         )}
         <AddMedicationForm onAddMedication={handleAddMedication} />
-        {editMode && (
+        {editMode && selectedMedication && (
           <>
             <EditMedicationForm
-              medication={selectedMedication}
+              medicationId={selectedMedication.id}
+              medicationData={selectedMedication}
               onEditMedication={handleEditMedication}
             />
 
