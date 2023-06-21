@@ -45,3 +45,12 @@
 .edit-medication-form-button:hover {
   background-color: #2a5f61;
 }
+
+@media screen and (max-width: 480px) {
+  .add-medication-form-container
+  .edit-medication-form-container {
+    height: 100vh;
+    margin-top: 0;
+  }
+}
+

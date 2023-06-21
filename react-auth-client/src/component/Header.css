@@ -61,3 +61,32 @@
   font-size: 2rem;
   color: #fff;
 }
+
+@media (max-width: 767px) {
+  .header {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .logo-container {
+    margin-bottom: 1rem;
+  }
+
+  .logo-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .nav-links {
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-links li {
+    font-size: 0.9rem;
+  }
+
+  .current-time {
+    font-size: 1.5rem;
+  }
+}
