@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signIn } from "../services/apiConfig.js";
 
 function SignIn({ onSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     const signInData = {
       email: email,
@@ -15,24 +16,14 @@ function SignIn({ onSignIn }) {
 
     console.log("Sending sign-in request...");
 
-    fetch("http://localhost:8000/api/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signInData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Sign-in successful. Response data:", data);
-        const { token } = data;
-        localStorage.setItem("token", token);
-        onSignIn(); // Call the callback to update isLoggedIn in App.js
-        navigate("/profile");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    try {
+      const { token, user_id } = await signIn(signInData);
+      localStorage.setItem("token", token);
+      onSignIn({ id: user_id, username: signInData.email }); // Pass the user data to the callback
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

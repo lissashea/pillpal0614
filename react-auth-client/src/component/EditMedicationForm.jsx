@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "./EditMedicationForm.css";
 
-function EditMedicationForm({ medication, onUpdateMedication }) {
-  const [updatedMedication, setUpdatedMedication] = useState(medication);
+function EditMedicationForm({ medicationId, medicationData, onEditMedication }) {
+  const [medicationValue, setMedicationValue] = useState(
+    medicationData?.medication || ""
+  );
+  const [dosage, setDosage] = useState(medicationData?.dosage || "");
+  const [description, setDescription] = useState(
+    medicationData?.description || ""
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateMedication(medication.id, updatedMedication);
+  
+    const updatedMedicationData = {
+      ...medicationData,
+      medication: medicationValue,
+      dosage: dosage,
+      description: description,
+    };
+  
+    onEditMedication(medicationId, updatedMedicationData);
   };
-
+  
   return (
     <div className="edit-medication-form-container">
       <h2 className="edit-medication-form-title">Edit Medication</h2>
@@ -20,13 +34,8 @@ function EditMedicationForm({ medication, onUpdateMedication }) {
           <input
             type="text"
             id="medication"
-            value={updatedMedication.medication}
-            onChange={(e) =>
-              setUpdatedMedication({
-                ...updatedMedication,
-                medication: e.target.value
-              })
-            }
+            value={medicationValue}
+            onChange={(e) => setMedicationValue(e.target.value)} // Update the function name here
             className="edit-medication-form-input"
           />
         </div>
@@ -37,13 +46,8 @@ function EditMedicationForm({ medication, onUpdateMedication }) {
           <input
             type="text"
             id="dosage"
-            value={updatedMedication.dosage}
-            onChange={(e) =>
-              setUpdatedMedication({
-                ...updatedMedication,
-                dosage: e.target.value
-              })
-            }
+            value={dosage}
+            onChange={(e) => setDosage(e.target.value)}
             className="edit-medication-form-input"
           />
         </div>
@@ -53,13 +57,8 @@ function EditMedicationForm({ medication, onUpdateMedication }) {
           </label>
           <textarea
             id="description"
-            value={updatedMedication.description}
-            onChange={(e) =>
-              setUpdatedMedication({
-                ...updatedMedication,
-                description: e.target.value
-              })
-            }
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="edit-medication-form-textarea"
           />
         </div>

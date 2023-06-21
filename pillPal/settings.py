@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001",] # Use whichever port your React Frontend is running on
+CORS_ALLOWED_ORIGINS = ["http://localhost:3001","http://localhost:3000",] # Use whichever port your React Frontend is running on
 
 # Application definition
 
@@ -56,6 +56,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'pillPal.urls'
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 TEMPLATES = [
     {

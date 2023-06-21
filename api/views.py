@@ -40,6 +40,15 @@ class RegisterView(APIView):
 class UpdateMedicationStatusView(UpdateAPIView):
     serializer_class = MedicationSerializer
     queryset = Medication.objects.all()
+    allowed_methods = ['GET', 'PUT', 'PATCH']  # Add PATCH to the allowed methods
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
 
 class LoginView(APIView):
     def get_user(self, email):
