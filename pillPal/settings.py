@@ -27,8 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001","http://localhost:3000",] # Use whichever port your React Frontend is running on
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3001",
+    "http://localhost:3000",
+    "http://localhost:3002",
+]
 # Application definition
 
 INSTALLED_APPS = [
