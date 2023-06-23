@@ -107,14 +107,14 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 
 DATABASES = {
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pp',
-        'USER': 'pp_admin',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'pp',
+    #     'USER': 'pp_admin',
+    #     'PASSWORD': 'password',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432'
+    # },
 
     'railway': {
         'ENGINE': 'django.db.backends.postgresql',
