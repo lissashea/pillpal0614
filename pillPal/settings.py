@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import django_heroku
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,7 +34,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com','railway.app']
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost','http://localhost','127.0.0.1', '0.0.0.0', 'railway.app','.herokuapp.com']
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -107,25 +108,23 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 
 DATABASES = {
 
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'pp',
+    #     'USER': 'pp_admin',
+    #     'PASSWORD': 'password',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432'
+    # },
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pp',
-        'USER': 'pp_admin',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'USER': 'xncowvtopmivce',
+        'PASSWORD': '50aaec88f6a5a4e61c730a8f4047f0a70d340de973526c110aa265d77e4c09a3',
+        'HOST': 'ec2-44-208-206-97.compute-1.amazonaws.com',
         'PORT': '5432'
-    },
-
-    'railway': {
-        'NAME': os.getenv('PGDATABASE'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT'),
     }
-
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
@@ -173,9 +172,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    '/Users/lissawarshaw/Desktop/repos/projects/pillpal-project-06-13/staticfiles',
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
