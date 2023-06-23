@@ -33,7 +33,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com','railway.app']
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -117,7 +117,6 @@ DATABASES = {
     },
 
     'railway': {
-        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('PGDATABASE'),
         'USER': os.getenv('PGUSER'),
         'PASSWORD': os.getenv('PGPASSWORD'),
