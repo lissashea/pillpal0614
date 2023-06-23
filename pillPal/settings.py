@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 dotenv_path = os.path.join(BASE_DIR, '.env')
 load_dotenv(dotenv_path)
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = '1f55423af9fcc6bd36f7b68266cd6fde5e727872b580aba9dd89b98879b3fa1e'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -107,14 +107,14 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 
 DATABASES = {
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'pp',
-    #     'USER': 'pp_admin',
-    #     'PASSWORD': 'password',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pp',
+        'USER': 'pp_admin',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
 
     'railway': {
         'ENGINE': 'django.db.backends.postgresql',
