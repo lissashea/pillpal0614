@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-_qt5t2h)^tyxn8=!zw$%=14e_ssorn!6k_ake_dg830nkur($^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com']
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",
@@ -94,15 +96,26 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'pp',
+#         'USER': 'pp_admin',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost'
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pp',
-        'USER': 'pp_admin',
-        'PASSWORD': 'password',
-        'HOST': 'localhost'
+        'NAME': os.getenv('RAILWAY_DATABASE_NAME'),
+        'USER': os.getenv('RAILWAY_DATABASE_USER'),
+        'PASSWORD': os.getenv('RAILWAY_DATABASE_PASSWORD'),
+        'HOST': os.getenv('RAILWAY_DATABASE_HOST'),
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
@@ -150,8 +163,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

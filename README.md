@@ -14,7 +14,7 @@ This is the backend component of the Medication Tracker application. It provides
 1. Clone the repository to your local machine:
 
    ```shell
-   git clone https://github.com/pillpal-project-06-13
+   git clone https://github.com/lissashea/pillpal0614.git
 
 2. Create a virtual environment and activate it:
 
