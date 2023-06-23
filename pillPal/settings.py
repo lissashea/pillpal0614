@@ -10,15 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import django_heroku
 from pathlib import Path
 # from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-dotenv_path = os.path.join(BASE_DIR, '.env')
-load_dotenv(dotenv_path)
+# dotenv_path = os.path.join(BASE_DIR, '.env')
+# load_dotenv(dotenv_path)
 
 SECRET_KEY = '1f55423af9fcc6bd36f7b68266cd6fde5e727872b580aba9dd89b98879b3fa1e'
 
@@ -105,8 +105,13 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# db_name = 'digi_be'
+# user = 'postgres'
+# password = '123'
 
 DATABASES = {
+    'default': dj_database_url.config(default='postgres://xncowvtopmivce:50aaec88f6a5a4e61c730a8f4047f0a70d340de973526c110aa265d77e4c09a3@ec2-44-208-206-97.compute-1.amazonaws.com:5432/dchgm5jcotscc1')
+}
 
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
@@ -117,14 +122,6 @@ DATABASES = {
     #     'PORT': '5432'
     # },
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'xncowvtopmivce',
-        'PASSWORD': '50aaec88f6a5a4e61c730a8f4047f0a70d340de973526c110aa265d77e4c09a3',
-        'HOST': 'ec2-44-208-206-97.compute-1.amazonaws.com',
-        'PORT': '5432'
-    }
-}
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
