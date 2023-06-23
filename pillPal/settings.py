@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-# from dotenv import load_dotenv
 import dj_database_url
+from dotenv import load_dotenv
+from decouple import config
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # dotenv_path = os.path.join(BASE_DIR, '.env')
 # load_dotenv(dotenv_path)
 
-SECRET_KEY = '1f55423af9fcc6bd36f7b68266cd6fde5e727872b580aba9dd89b98879b3fa1e'
+DEBUG = True
+SECRET_KEY = 'kdaa60dn*mnj-!2iwsxa@wm*m(m*0#)#18*y5!x1m=twrk6n03'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,8 +33,7 @@ SECRET_KEY = '1f55423af9fcc6bd36f7b68266cd6fde5e727872b580aba9dd89b98879b3fa1e'
 # SECRET_KEY = 'django-insecure-_qt5t2h)^tyxn8=!zw$%=14e_ssorn!6k_ake_dg830nkur($^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# DEBUG = config('DEBUG',cast=bool)
 
 # ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com','railway.app']
 
@@ -59,6 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # <-------Add this line here (above Common Middleware)
     'corsheaders.middleware.CorsMiddleware',
@@ -109,24 +113,52 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 # user = 'postgres'
 # password = '123'
 
+
+db_name = 'pp'
+user = 'pp_admin'
+password = 'password'
+
+local_db_url = f'postgres://{user}:{password}@localhost:5432/{db_name}'
+
+
+production_db_url = os.environ.get('DATABASE_URL')
+
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://xncowvtopmivce:50aaec88f6a5a4e61c730a8f4047f0a70d340de973526c110aa265d77e4c09a3@ec2-44-208-206-97.compute-1.amazonaws.com:5432/dchgm5jcotscc1')
+    'default': dj_database_url.parse(production_db_url) if production_db_url else local_db_url
 }
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'pp',
-    #     'USER': 'pp_admin',
-    #     'PASSWORD': 'password',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # },
-
+# if 'DJANGO_SETTINGS_MODULE' in os.environ and os.environ['DJANGO_SETTINGS_MODULE'] == 'pillPal.settings_heroku':
+#     # Heroku production environment
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'dchgm5jcotscc1',
+#             'USER': 'xncowvtopmivce',
+#             'PASSWORD': '50aaec88f6a5a4e61c730a8f4047f0a70d340de973526c110aa265d77e4c09a3',
+#             'HOST': 'ec2-44-208-206-97.compute-1.amazonaws.com',
+#             'PORT': '5432'
+#         }
+#     }
+# else:
+#     # Local development environment
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'pp',
+#             'USER': 'pp_admin',
+#             'PASSWORD': 'password',
+#             'HOST': 'localhost',
+#             'PORT': '5432'
+#         }
+#     }
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'api.authentication.JWTAuthentication',
@@ -170,6 +202,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# django_heroku.settings(locals())
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
