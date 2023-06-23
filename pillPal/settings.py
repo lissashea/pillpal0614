@@ -11,22 +11,31 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_path = os.path.join(os.path.dirname(
+    os.path.dirname(__file__)), 'myprojectenv', '.env')
+
+load_dotenv(dotenv_path)
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_qt5t2h)^tyxn8=!zw$%=14e_ssorn!6k_ake_dg830nkur($^'
+# SECRET_KEY = 'django-insecure-_qt5t2h)^tyxn8=!zw$%=14e_ssorn!6k_ake_dg830nkur($^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com']
+# ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com','railway.app']
+
+ALLOWED_HOSTS = ['*']
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -46,13 +55,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-   
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # <-------Add this line here (above Common Middleware)
+    # <-------Add this line here (above Common Middleware)
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,24 +106,27 @@ WSGI_APPLICATION = 'pillPal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'pp',
-#         'USER': 'pp_admin',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost'
-#     }
-# }
 
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('RAILWAY_DATABASE_NAME'),
-        'USER': os.getenv('RAILWAY_DATABASE_USER'),
-        'PASSWORD': os.getenv('RAILWAY_DATABASE_PASSWORD'),
-        'HOST': os.getenv('RAILWAY_DATABASE_HOST'),
+        'NAME': 'pp',
+        'USER': 'pp_admin',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
+
+    'railway': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST'),
+        'PORT': os.getenv('PGPORT'),
     }
+
 }
 
 
@@ -163,8 +176,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATICFILES_DIRS = [
+    '/Users/lissawarshaw/Desktop/repos/projects/pillpal-project-06-13/staticfiles',
+]
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -172,4 +186,3 @@ CORS_ALLOW_CREDENTIALS = True
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
