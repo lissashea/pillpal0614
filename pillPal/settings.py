@@ -45,8 +45,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3002",
     "https://pillpal-a113c55bba4b.herokuapp.com",
-    "https://main--timely-crisp-3f77ad.netlify.app/",
-    "https://main--timely-crisp-3f77ad.netlify.app"
+    "https://main--timely-crisp-3f77ad.netlify.app",
 ]
 # Application definition
 
