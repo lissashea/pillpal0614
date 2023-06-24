@@ -37,7 +37,7 @@ SECRET_KEY = 'kdaa60dn*mnj-!2iwsxa@wm*m(m*0#)#18*y5!x1m=twrk6n03'
 
 # ALLOWED_HOSTS = ['http://localhost', '.herokuapp.com','railway.app']
 
-ALLOWED_HOSTS = ['localhost','http://localhost','127.0.0.1', '0.0.0.0', 'railway.app','.herokuapp.com']
+ALLOWED_HOSTS = ['localhost','http://localhost','127.0.0.1', '0.0.0.0', 'railway.app','.herokuapp.com','.netlify.app']
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -45,6 +45,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3002",
     "https://pillpal-a113c55bba4b.herokuapp.com",
+    "https://main--timely-crisp-3f77ad.netlify.app/",
+    "https://main--timely-crisp-3f77ad.netlify.app"
 ]
 # Application definition
 
