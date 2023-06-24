@@ -124,7 +124,8 @@ local_db_url = f'postgres://{user}:{password}@localhost:5432/{db_name}'
 production_db_url = os.environ.get('DATABASE_URL')
 
 DATABASES = {
-    'default': dj_database_url.parse(production_db_url) if production_db_url else local_db_url
+
+    'default': dj_database_url.parse(production_db_url) if production_db_url else dj_database_url.parse(local_db_url)
 }
 
 # if 'DJANGO_SETTINGS_MODULE' in os.environ and os.environ['DJANGO_SETTINGS_MODULE'] == 'pillPal.settings_heroku':

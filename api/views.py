@@ -13,9 +13,15 @@ import jwt
 from rest_framework.generics import UpdateAPIView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
 
 User = get_user_model()
+
+
+def home(_):
+    return JsonResponse({'message': 'Welcome to PillPal API!'})
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -107,3 +113,4 @@ class DeleteMedicationView(APIView):
         medication = get_object_or_404(Medication, id=medication_id, user=request.user)
         medication.delete()
         return JsonResponse({'message': 'Medication deleted successfully'})
+    
